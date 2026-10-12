@@ -2,6 +2,7 @@ from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from models import db, Store
 from schemas import StoreSchema
+from flask_jwt_extended import jwt_required
 
 
 blp = Blueprint(
@@ -14,11 +15,12 @@ blp = Blueprint(
 
 @blp.route("/")
 class StoreList(MethodView):
-
+    @jwt_required()
     @blp.response(200, StoreSchema(many=True))
     def get(self):
         return Store.query.all()
 
+    @jwt_required()
     @blp.arguments(StoreSchema)
     @blp.response(201, StoreSchema)
     def post(self, store_data):
@@ -36,6 +38,7 @@ class StoreList(MethodView):
 @blp.route("/<int:store_id>")
 class StoreById(MethodView):
 
+    @jwt_required()
     @blp.response(200, StoreSchema)
     def get(self, store_id):
         store = Store.query.get(store_id)
@@ -45,6 +48,7 @@ class StoreById(MethodView):
 
         return store
 
+    @jwt_required()
     def delete(self, store_id):
         store = Store.query.get(store_id)
 

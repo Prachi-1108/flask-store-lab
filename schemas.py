@@ -32,3 +32,15 @@ class ProductSchema(Schema):
         required=True,
         validate=validate.Range(min=1)
     )
+
+
+class LoginSchema(Schema):
+    username = fields.Str(
+        required=True,
+        validate=validate.Length(min=1, max=50)
+    )
+
+    password = fields.Str(
+        required=True,
+        validate=validate.Length(min=1, max=128)
+    )
